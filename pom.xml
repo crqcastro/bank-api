@@ -32,7 +32,7 @@
         <sonar.plugin.version>3.11.0.3922</sonar.plugin.version>
         <sonar.organization>crqcastro</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.projectKey>cesarrqc_bank-api</sonar.projectKey>
+        <sonar.projectKey>crqcastro_bank-api</sonar.projectKey>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.exclusions>**/BankApiApplication.java,**/infrastructure/config/**,**/domain/model/**,**/adapter/in/web/**/request/**,**/adapter/in/web/**/response/**</sonar.exclusions>
