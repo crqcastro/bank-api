@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <!-- Liberar JUnit/Hamcrest só em src/test/java -->
+    <suppress
+            files=".*[\\/]src[\\/]test[\\/]java[\\/].*"
+            checks="IllegalImport"
+            message=".*(junit|org\.junit|org\.junit\.jupiter|org\.hamcrest).*"/>
+
+    <!-- Test method names can use snake_case (e.g. method_shouldDoX_whenY) -->
+    <suppress
+            files=".*[\\/]src[\\/]test[\\/]java[\\/].*"
+            checks="MethodName"/>
+
+    <!-- Static star imports for AssertJ and Mockito are idiomatic in tests -->
+    <suppress
+            files=".*[\\/]src[\\/]test[\\/]java[\\/].*"
+            checks="AvoidStarImport"
+            message=".*(org\.assertj|org\.mockito).*"/>
+
+    <!-- JPA and Lombok wildcard imports are conventional in domain entities -->
+    <suppress
+            files=".*[\\/]domain[\\/].*\.java"
+            checks="AvoidStarImport"
+            message=".*(jakarta\.persistence|lombok).*"/>
+
+    <!-- Empty record/class bodies {} are valid Java syntax -->
+    <suppress
+            checks="WhitespaceAround"
+            message="'\{' is not followed by whitespace"/>
+    <suppress
+            checks="WhitespaceAround"
+            message="'\}' is not preceded with whitespace"/>
+
+    <!-- ArchUnit @ArchTest fields use descriptive snake_case names by convention -->
+    <suppress
+            files=".*[\\/]architecture[\\/].*\.java"
+            checks="ConstantName"/>
+
+    <!-- TransactionController aggregates 4 use-case ports by design; fan-out is structurally unavoidable -->
+    <suppress
+            files=".*TransactionController\.java"
+            checks="ClassFanOutComplexity"/>
+
+    <suppress files="[/\\]target[/\\]" checks=".*"/>
+</suppressions>
