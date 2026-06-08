@@ -1,5 +1,7 @@
 # bank-api
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=crqcastro_bank-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=crqcastro_bank-api)
+
 API REST para banco digital com movimentacoes financeiras, gestao de clientes e contas, e notificacoes assincronas.
 
 ## Stack
