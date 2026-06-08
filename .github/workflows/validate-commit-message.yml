@@ -22,9 +22,16 @@ jobs:
           PATTERN='^(feat|fix|refactor|docs|test|chore|perf|ci)(\(.+\))?: .{1,100}$'
           ERRORS=0
 
-          while IFS= read -r commit; do
-            SHA=$(echo "$commit" | cut -d' ' -f1)
-            MSG=$(echo "$commit" | cut -d' ' -f2-)
+          while IFS= read -r SHA; do
+            # Use %B (full body) + head -1 to always get only the first line,
+            # avoiding %s concatenating subject+body when there is no blank separator.
+            MSG=$(git log -1 --format="%B" "$SHA" | head -1)
+
+            # Skip automatically generated merge commits.
+            if echo "$MSG" | grep -qP "^Merge "; then
+              echo "::notice::Skipping merge commit $SHA: $MSG"
+              continue
+            fi
 
             if ! echo "$MSG" | grep -qP "$PATTERN"; then
               echo "::error::Invalid commit message in $SHA: \"$MSG\""
@@ -34,7 +41,7 @@ jobs:
             else
               echo "::notice::OK $SHA: $MSG"
             fi
-          done < <(git log "$BASE..$HEAD" --pretty=format:"%h %s")
+          done < <(git log "$BASE..$HEAD" --pretty=format:"%H")
 
           if [ "$ERRORS" -gt 0 ]; then
             echo ""

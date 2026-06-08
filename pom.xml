@@ -30,7 +30,7 @@
         <opentelemetry-semconv.version>1.41.1</opentelemetry-semconv.version>
         <owasp.dependency-check.version>10.0.4</owasp.dependency-check.version>
         <sonar.plugin.version>3.11.0.3922</sonar.plugin.version>
-        <sonar.organization>cesarrqc</sonar.organization>
+        <sonar.organization>crqcastro</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>cesarrqc_bank-api</sonar.projectKey>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
