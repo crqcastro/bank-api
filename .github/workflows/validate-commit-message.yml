@@ -1,0 +1,53 @@
+name: Validate Commit Message
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  validate-commits:
+    name: Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+
+          PATTERN='^(feat|fix|refactor|docs|test|chore|perf|ci)(\(.+\))?: .{1,100}$'
+          ERRORS=0
+
+          while IFS= read -r SHA; do
+            # Use %B (full body) + head -1 to always get only the first line,
+            # avoiding %s concatenating subject+body when there is no blank separator.
+            MSG=$(git log -1 --format="%B" "$SHA" | head -1)
+
+            # Skip automatically generated merge commits.
+            if echo "$MSG" | grep -qP "^Merge "; then
+              echo "::notice::Skipping merge commit $SHA: $MSG"
+              continue
+            fi
+
+            if ! echo "$MSG" | grep -qP "$PATTERN"; then
+              echo "::error::Invalid commit message in $SHA: \"$MSG\""
+              echo "  Expected format: <type>(<scope>): <description>"
+              echo "  Valid types: feat, fix, refactor, docs, test, chore, perf, ci"
+              ERRORS=$((ERRORS + 1))
+            else
+              echo "::notice::OK $SHA: $MSG"
+            fi
+          done < <(git log "$BASE..$HEAD" --pretty=format:"%H")
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo ""
+            echo "Found $ERRORS invalid commit message(s)."
+            echo "See: https://www.conventionalcommits.org"
+            exit 1
+          fi
+
+          echo "All commit messages are valid."
